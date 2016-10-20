@@ -19,6 +19,7 @@ class TestController extends Controller
         $fp = fopen($path . $fileName, "w");
         fwrite($fp, $str);
         fclose($fp);
+        
         return view("test.aa");
     }
 
