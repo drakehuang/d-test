@@ -12,7 +12,11 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['prefix' => 'v1'], function() {
+	Route::post('/students/r', '\App\Http\Controllers\API\v1\StudentController@postSearch');
+	Route::post('/students/c', '\App\Http\Controllers\API\v1\StudentController@postInsertStudent');
+	Route::get('/students/grades', '\App\Http\Controllers\API\v1\StudentController@getGrades');
+	Route::resource('/students', '\App\Http\Controllers\API\v1\StudentController');
+});
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// Route::get("assignments/api/v1/students/{$id}", "\App\Http\Controllers\API\v1\StudentController@show");

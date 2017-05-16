@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +16,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('test', 'Test\TestController');

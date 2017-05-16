@@ -15,10 +15,10 @@ class CreateCourseTable extends Migration
     {
         Schema::create('course', function(Blueprint $table)
         {
-            $table->increments('id');
-            $table->string("name", 60)->comment("課程名稱");
-            $table->dateTime("createDate")->comment("開課時間");
-            $table->string("remark", 100)->comment("課程備註");
+            $table->increments('id')->comment("流水編號");
+            $table->string("name", 60)->comment("專案中文或英文名稱");
+            $table->date("createDate")->comment("建立日期");
+            $table->string("remark", 100)->nullable()->comment("備註");
         });
     }
 

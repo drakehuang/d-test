@@ -15,9 +15,9 @@ class CreateGradeTable extends Migration
     {
         Schema::create('grade', function(Blueprint $table)
         {
-            $table->char('level', 1);
+            $table->char('level', 1)->comment("評等，如：A, B, C, D");
             $table->primary('level');
-            $table->string("remark", 100);
+            $table->string("remark", 100)->nullable()->comment("備註");
         });
     }
 

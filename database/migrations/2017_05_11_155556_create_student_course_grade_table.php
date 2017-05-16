@@ -15,11 +15,11 @@ class CreateStudentCourseGradeTable extends Migration
     {
         Schema::create('student_course_grade', function(Blueprint $table)
         {
-            $table->integer("sudentId")->unsigned()->comment("學生ID");
-            $table->foreign('sudentId')->references('id')->on('student');
-            $table->integer("courseId")->unsigned()->comment("課程ID");
+            $table->integer("studentId")->unsigned();
+            $table->foreign('studentId')->references('id')->on('student');
+            $table->integer("courseId")->unsigned();
             $table->foreign('courseId')->references('id')->on('course');
-            $table->char('gradelevel', 1);
+            $table->char('gradelevel', 1)->nullable();
         });
     }
 

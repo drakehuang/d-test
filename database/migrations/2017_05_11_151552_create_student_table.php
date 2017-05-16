@@ -15,11 +15,11 @@ class CreateStudentTable extends Migration
     {
         Schema::create('student', function(Blueprint $table)
         {
-            $table->increments('id');
-            $table->string("name", 60)->comment("姓名");
-            $table->dateTime("birthday")->comment("生日");
-            $table->dateTime("registerDate")->comment("註冊日期");
-            $table->string("remark", 100)->comment("備註");
+            $table->increments('id')->comment("流水號");
+            $table->string("name", 60)->comment("學生中文全名");
+            $table->date("birthday")->comment("學生出生年月日");
+            $table->date("registerDate")->comment("學生註冊日期");
+            $table->string("remark", 100)->nullable()->comment("備註");
         });
     }
 
