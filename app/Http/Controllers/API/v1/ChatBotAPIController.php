@@ -97,5 +97,6 @@ class ChatBotAPIController extends Controller
                 if (!empty($message)) {
                     $result = curl_exec($ch); // user will get the message
                 }
+            }
     }
 }
