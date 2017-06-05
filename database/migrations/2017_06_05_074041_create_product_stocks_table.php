@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGradeTable extends Migration
+class CreateProductStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateGradeTable extends Migration
      */
     public function up()
     {
-        Schema::create('grade', function(Blueprint $table)
+        Schema::create('product_stocks', function(Blueprint $table)
         {
-            $table->char('level', 1)->comment("評等，如：A, B, C, D");
-            $table->primary('level');
-            $table->string("remark", 100)->nullable()->comment("備註");
+            $table->increments('id');
+            $table->integer("product_id");
+            $table->string("specification");
+            $table->integer("stock");
         });
     }
 
@@ -28,6 +29,6 @@ class CreateGradeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grade');
+        Schema::dropIfExists('product_stocks');
     }
 }
