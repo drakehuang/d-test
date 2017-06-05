@@ -44,6 +44,15 @@ class ChatBotAPIController extends Controller
                     "text":" ' . $message . '"
                 }
             }';
+
+            /* curl setting to send a json post data */
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            if (!empty($message)) {
+                $result = curl_exec($ch); // user will get the message
+            }
         }
+
     }
 }
