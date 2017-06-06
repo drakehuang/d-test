@@ -88,9 +88,18 @@ class ChatBotAPIController extends Controller
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            if (!empty($message)) {
-                $result = curl_exec($ch); // user will get the message
-            }
+
+            curl_exec($ch); // user will get the message
+
+            $replyArray['message'] = ['text' => "Chat with us and ask questions, but remember: if at any time you want to speak to a Burberry consultant, you can find them in the menu at the bottom of your screen along with other options."];
+            $jsonData = json_encode($replyArray);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_exec($ch); // user will get the message
+
+            $replyArray['message'] = ['text' => "PLAY WITH BEEMO! Put Beemo from Adventure Time on your device."];
+            $jsonData = json_encode($replyArray);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_exec($ch); // user will get the message
         }
     }
 
