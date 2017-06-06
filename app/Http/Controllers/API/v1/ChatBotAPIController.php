@@ -1,16 +1,14 @@
 <?php namespace App\Http\Controllers\API\v1;
 
-use DB;
-use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Student;
 use App\Course;
 
 
 class ChatBotAPIController extends Controller
 {
     protected $page_token;
+
 
     public function __construct()
     {
@@ -19,7 +17,6 @@ class ChatBotAPIController extends Controller
 
    /**
     * Facebook Webhook 驗證
-    *
     */
         public function getFacebookWebhook (Request $request)
     {
@@ -71,8 +68,11 @@ class ChatBotAPIController extends Controller
             $url = "https://graph.facebook.com/v2.6/me/messenger_profile?fields=greeting&access_token=" . $this->page_token;
             $greetingArray = json_decode(file_get_contents($url), true);
 
+            // 透過psid取得用戶資訊
+            $userInfoArray = $this->getUserInformationByPsid($sender);
+
             // 設定訊息
-            $message = $greetingArray['data'][0]['greeting'][1]['text'];
+            $message = $greetingArray['data'][0]['greeting'][1]['text'] . "!!!" . $userInfoArray['first_name'] . " " .$userInfoArray['last_name'];
 
             // 回覆訊息給user的URL
             $url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $this->page_token;
@@ -119,6 +119,25 @@ class ChatBotAPIController extends Controller
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             if (!empty($message)) {
                 $result = curl_exec($ch); // user will get the message
+            }
+        }
+    }
+
+    /**
+     * 透過PSID(傳入的sender id)取得用戶個人資料，PSID與FB登入API取得的ID不同，不可共用
+     * @author Drake/2017.06.06
+     * @param  Integer | $psid
+     * @link   https://developers.facebook.com/docs/messenger-platform/user-profile
+     * @return Array
+     */
+    private function getUserInformationByPsid($psid = null)
+    {
+        if(!is_null($psid)) {
+            $url = "https://graph.facebook.com/v2.6/" . $psid . "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" . $this->page_token;
+            $userInformation = null;
+            $userInformation = file_get_contents($url);
+            if (!is_null($userInformation)) {
+                return json_decode($userInformation, true);
             }
         }
     }
