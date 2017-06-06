@@ -52,7 +52,7 @@ class ChatBotAPIController extends Controller
             }
 
             // User傳送訊息
-            if (isset(isset($input['entry'][0]['messaging'][0]['message']['text'])) {
+            if (isset($input['entry'][0]['messaging'][0]['message']['text'])) {
                 // 處理User發送訊息的回應訊息
                 $this->replyMessage($input['entry'][0]['messaging'][0]['sender']['id'], $input['entry'][0]['messaging'][0]['message']['text']);
             }
