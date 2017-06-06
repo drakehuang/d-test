@@ -88,13 +88,18 @@ class ChatBotAPIController extends Controller
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-
             curl_exec($ch); // user will get the message
+
+            $this->typeOn($sender);
+            sleep(2);
 
             $replyArray['message'] = ['text' => "Chat with us and ask questions, but remember: if at any time you want to speak to a Burberry consultant, you can find them in the menu at the bottom of your screen along with other options."];
             $jsonData = json_encode($replyArray);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_exec($ch); // user will get the message
+
+            $this->typeOn($sender);
+            sleep(2);
 
             $replyArray['message'] = ['text' => "PLAY WITH BEEMO! Put Beemo from Adventure Time on your device."];
             $jsonData = json_encode($replyArray);
@@ -121,7 +126,6 @@ class ChatBotAPIController extends Controller
             $jsonData = json_encode($replyArray);
             /*initialize curl*/
             $ch = curl_init($url);
-
             /* curl setting to send a json post data */
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
@@ -151,4 +155,25 @@ class ChatBotAPIController extends Controller
         }
     }
 
+    /**
+     * 傳送打字狀態
+     *
+     */
+    public function typeOn($sender = null)
+    {
+        if(!is_null($sender)) {
+            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=" . $this->page_token;
+
+            $replyArray['recipient']     = ['id'   => $sender];
+            $replyArray['sender_action'] = "typing_on";
+            $jsonData = json_encode($replyArray);
+
+            $ch = curl_init($url);
+            /* curl setting to send a json post data */
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_exec($ch);
+        }
+    }
 }
