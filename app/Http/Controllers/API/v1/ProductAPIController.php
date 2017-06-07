@@ -14,8 +14,7 @@ class ProductAPIController extends Controller
 
     public function index()
     {
-        echo 'dd';
-        exit;
+        return view("products.product_detail");
     }
 
 

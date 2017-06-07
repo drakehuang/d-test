@@ -38,14 +38,26 @@ class ChatBotAPIController extends Controller
     */
     public function postFacebookWebhook(Request $request)
     {
-
+        $this->sendProductList(1211811688941127);
         $input = $request->all();
 
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
-            // 首次進入的User，發送歡迎詞
-            if (isset($input['entry'][0]['messaging'][0]['postback']['payload']) && $input['entry'][0]['messaging'][0]['postback']['payload'] == 'GET_STARTED_PAYLOAD') {
-                // 處理User點擊[開始使用]的回應訊息
-                $this->sendGreetingText($input['entry'][0]['messaging'][0]['sender']['id']);
+            // 參數有設定特殊行為
+            if (isset($input['entry'][0]['messaging'][0]['postback']['payload'])) {
+
+                switch ($input['entry'][0]['messaging'][0]['postback']['payload']) {
+                    // 處理User點擊[開始使用]的回應訊息
+                    case 'GET_STARTED_PAYLOAD':
+                        $this->sendGreetingText($input['entry'][0]['messaging'][0]['sender']['id']);
+                        break;
+
+                    // 取得商品
+                    case 'PRODUCT_LIST':
+                        // 處理User點擊[開始使用]的回應訊息
+                        $this->sendProductList($input['entry'][0]['messaging'][0]['sender']['id']);
+                        break;
+                }
+
             }
 
             // User傳送訊息
@@ -55,6 +67,34 @@ class ChatBotAPIController extends Controller
             }
         }
     }
+
+   /**
+     * 傳送打字狀態
+     *
+     */
+    public function typeOn($sender = null)
+    {
+        if(!is_null($sender)) {
+            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=" . $this->page_token;
+
+            $replyArray['recipient']     = ['id'   => $sender];
+            $replyArray['sender_action'] = "typing_on";
+            $jsonData = json_encode($replyArray);
+
+            $ch = curl_init($url);
+            /* curl setting to send a json post data */
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_exec($ch);
+        }
+    }
+
+   /**
+    * 取得聊天室商品列表
+    * @author Drake/2017.06.06
+    *
+    */
 
    /**
     * 對首次使用的用戶發送歡迎詞
@@ -105,6 +145,24 @@ class ChatBotAPIController extends Controller
             $jsonData = json_encode($replyArray);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_exec($ch); // user will get the message
+
+            $this->typeOn($sender);
+            sleep(2);
+
+            $replyArray['message'] = [
+                'text'          => "click the icon to get product list",
+                'quick_replies' => [
+                    [
+                        "content_type" => "text",
+                        "title"        => "🎁",
+                        "payload"      => "PRODUCT_LIST"
+                    ]
+                ]
+            ];
+
+            $jsonData = json_encode($replyArray);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_exec($ch); // user will get the message
         }
     }
 
@@ -117,9 +175,7 @@ class ChatBotAPIController extends Controller
     private function replyMessage($sender = null , $message = null)
     {
         if (!is_null($sender) && !is_null($message)) {
-
             $url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $this->page_token;
-
             // 設定call FB API的參數
             $replyArray['recipient'] = ['id'   => $sender];
             $replyArray['message']   = ['text' => $message];
@@ -156,24 +212,87 @@ class ChatBotAPIController extends Controller
     }
 
     /**
-     * 傳送打字狀態
+     * 回傳聊天室商品列表
+     *
      *
      */
-    public function typeOn($sender = null)
+    private function sendProductList($sender = null)
     {
         if(!is_null($sender)) {
-            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=" . $this->page_token;
+            // 設定call FB API的參數
+            $replyArray['recipient'] = ['id'   => $sender];
+            $replyArray['message']   = [
+                'attachment' => [
+                    "type"    => "template",
+                    "payload" => [
+                        "template_type" => "generic",
+                        "elements"      => [
+                            [
+                                "title"          => "測試商品I",
+                                "image_url"      => "http://static.friday.tw/mall/7731188/s_3990497_0ebcf75c210_o.jpg",
+                                "subtitle"       => "顯示一小段商品描述",
+                                "default_action" => [
+                                    "type"                 => "web_url",
+                                    "url"                  => "https://www.aibeemo.com/api/v1/product",
+                                    "webview_height_ratio" => "tall",
+                                    // "messenger_extensions"
+                                    // "fallback_url"
+                                    // "webview_share_button"
+                                ],
+                                "buttons" => [
+                                    [
+                                        "type"                 => "web_url",
+                                        "url"                  => "https://www.aibeemo.com/api/v1/product",
+                                        "title"                => "查看商品",
+                                        "webview_height_ratio" => "tall"
+                                    ],
+                                    [
+                                        "type"    => "postback",
+                                        "title"   => "詢問商品",
+                                        "payload" => "ASK_PRODUCT"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "title"          => "測試商品II",
+                                "image_url"      => "http://static.friday.tw/mall/7731188/s_3990497_0ebcf75c210_o.jpg",
+                                "subtitle"       => "顯示一小段商品描述II",
+                                "default_action" => [
+                                    "type"                 => "web_url",
+                                    "url"                  => "https://www.aibeemo.com/api/v1/product",
+                                    "webview_height_ratio" => "tall",
+                                    // "messenger_extensions"
+                                    // "fallback_url"
+                                    // "webview_share_button"
+                                ],
+                                "buttons" => [
+                                    [
+                                        "type"                 => "web_url",
+                                        "url"                  => "https://www.aibeemo.com/api/v1/product",
+                                        "title"                => "查看商品",
+                                        "webview_height_ratio" => "tall",
+                                    ],
+                                    [
+                                        "type"    => "postback",
+                                        "title"   => "詢問商品",
+                                        "payload" => "ASK_PRODUCT"
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
 
-            $replyArray['recipient']     = ['id'   => $sender];
-            $replyArray['sender_action'] = "typing_on";
             $jsonData = json_encode($replyArray);
-
+            /*initialize curl*/
+            $url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $this->page_token;
             $ch = curl_init($url);
             /* curl setting to send a json post data */
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            curl_exec($ch);
+            $result = curl_exec($ch); // user will get the message
         }
     }
 }

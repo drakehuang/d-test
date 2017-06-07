@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function() {
     Route::get('/fb-webhook', '\App\Http\Controllers\API\v1\ChatBotAPIController@getFacebookWebhook');
     Route::post('/fb-webhook', '\App\Http\Controllers\API\v1\ChatBotAPIController@postFacebookWebhook');
+    Route::get('/template-list', '\App\Http\Controllers\API\v1\ChatBotAPIController@getTemplateList');
 
     // restful API
     Route::resource('product', '\App\Http\Controllers\API\v1\ProductAPIController');
