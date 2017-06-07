@@ -243,6 +243,18 @@ img {
                         <div class="action">
                             <button class="add-to-cart btn btn-default" type="button">add to cart</button>
                             <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+                            <form action="/api/v1/order/checkout" method="POST">
+                              <script
+                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="pk_test_w594dol6XoTYblnkp3XpjKGy"
+                                data-amount="999"
+                                data-name="Latticespace Limited"
+                                data-description="Widget"
+                                data-image="https://s3.amazonaws.com/stripe-uploads/acct_184SHKLYHNLj1ugsmerchant-icon-1463298316099-profile-picture.png"
+                                data-locale="auto"
+                                data-currency="hkd">
+                              </script>
+                            </form>
                         </div>
                     </div>
                 </div>
