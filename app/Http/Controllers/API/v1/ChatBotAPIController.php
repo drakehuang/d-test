@@ -71,12 +71,8 @@ class ChatBotAPIController extends Controller
                 }
 
             } else if (isset($input['entry'][0]['messaging'][0]['message']['text'])) {    // 一般訊息
-                    if ($input['entry'][0]['messaging'][0]['message']['text'] == 'reload') {
-                        $this->sendGreetingText($sender);
-                    } else {
-                        // 處理User發送訊息的回應訊息
-                        $this->replyMessage($sender, $input['entry'][0]['messaging'][0]['message']['text']);
-                    }
+                // 處理User發送訊息的回應訊息
+                $this->replyMessage($sender, $input['entry'][0]['messaging'][0]['message']['text']);
             }
 
         }
