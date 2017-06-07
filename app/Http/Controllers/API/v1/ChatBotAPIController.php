@@ -41,14 +41,13 @@ class ChatBotAPIController extends Controller
         $input = $request->all();
 
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
-
+            $sender = $input['entry'][0]['messaging'][0]['sender']['id'];
             // 判斷是否為quick_reply
             if (isset($input['entry'][0]['messaging'][0]['message']['quick_reply']['payload'])) {
 
                 switch ($input['entry'][0]['messaging'][0]['message']['quick_reply']['payload']) {
                     // 取得商品
                     case 'PRODUCT_LIST':
-                        $sender = $input['entry'][0]['messaging'][0]['sender']['id'];
                         $this->typeOn($sender);
                         sleep(2);
                         // 處理User點擊[開始使用]的回應訊息
@@ -61,13 +60,22 @@ class ChatBotAPIController extends Controller
                 switch ($input['entry'][0]['messaging'][0]['postback']['payload']) {
                     // 處理User點擊[開始使用]的回應訊息
                     case 'GET_STARTED_PAYLOAD':
-                        $this->sendGreetingText($input['entry'][0]['messaging'][0]['sender']['id']);
+                        $this->sendGreetingText($sender);
+                        break;
+                    // 處理詢問商品
+                    case 'ASK_PRODUCT':
+                        $this->typeOn($sender);
+                        sleep(2);
+                        $this->replyMessage($sender, '您好，請問需要詢問商品哪些事項');
                         break;
                 }
 
             } else if (isset($input['entry'][0]['messaging'][0]['message']['text'])) {    // 一般訊息
+                    if ($input['entry'][0]['messaging'][0]['message']['text'] == 'reload') {
+                        $this->sendGreetingText($sender);
+                    }
                     // 處理User發送訊息的回應訊息
-                    $this->replyMessage($input['entry'][0]['messaging'][0]['sender']['id'], $input['entry'][0]['messaging'][0]['message']['text']);
+                    $this->replyMessage($sender, $input['entry'][0]['messaging'][0]['message']['text']);
             }
 
         }
