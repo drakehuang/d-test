@@ -52,17 +52,19 @@ class ChatBotAPIController extends Controller
 
                     // 取得商品
                     case 'PRODUCT_LIST':
+                        $this->typeOn($sender);
+                        sleep(2);
                         // 處理User點擊[開始使用]的回應訊息
                         $this->sendProductList($input['entry'][0]['messaging'][0]['sender']['id']);
                         break;
                 }
 
-            }
-
-            // User傳送訊息
-            if (isset($input['entry'][0]['messaging'][0]['message']['text'])) {
-                // 處理User發送訊息的回應訊息
-                $this->replyMessage($input['entry'][0]['messaging'][0]['sender']['id'], $input['entry'][0]['messaging'][0]['message']['text']);
+            } else {
+                // User傳送訊息
+                if (isset($input['entry'][0]['messaging'][0]['message']['text'])) {
+                    // 處理User發送訊息的回應訊息
+                    $this->replyMessage($input['entry'][0]['messaging'][0]['sender']['id'], $input['entry'][0]['messaging'][0]['message']['text']);
+                }
             }
         }
     }
@@ -291,7 +293,8 @@ class ChatBotAPIController extends Controller
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            $result = curl_exec($ch); // user will get the message
+            curl_exec($ch); // user will get the message
+            curl_close($ch);
         }
     }
 }
