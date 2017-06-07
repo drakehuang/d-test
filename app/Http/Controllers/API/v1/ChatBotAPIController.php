@@ -52,10 +52,10 @@ class ChatBotAPIController extends Controller
                         break;
 
                     // 取得商品
-                    case 'PRODUCT_LIST':
-                        // 處理User點擊[開始使用]的回應訊息
-                        $this->sendProductList($input['entry'][0]['messaging'][0]['sender']['id']);
-                        break;
+                    // case 'PRODUCT_LIST':
+                    //     // 處理User點擊[開始使用]的回應訊息
+                    //     $this->sendProductList($input['entry'][0]['messaging'][0]['sender']['id']);
+                    //     break;
                 }
 
             }
