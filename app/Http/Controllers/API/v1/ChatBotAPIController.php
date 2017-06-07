@@ -9,10 +9,10 @@ class ChatBotAPIController extends Controller
 {
     protected $page_token;
 
-
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->page_token = "EAASrkWmxF5IBAJ2LKttekATw14uITuYurz0fiioflZBF0abZA67ITmieKXS4KP0V4YSFfpZAfGbl4LWN7Eao1Ih3lxORr8t82FjYM8SjuAcl6PbiWBa03RB8TRA4I448z08coqtweCkRSstPPqROmgiQZBZAgZADAEi2IC6ZB0UugZDZD";
+
     }
 
    /**
@@ -52,10 +52,11 @@ class ChatBotAPIController extends Controller
 
                     // 取得商品
                     case 'PRODUCT_LIST':
+                        $sender = $input['entry'][0]['messaging'][0]['sender']['id'];
                         $this->typeOn($sender);
                         sleep(2);
                         // 處理User點擊[開始使用]的回應訊息
-                        $this->sendProductList($input['entry'][0]['messaging'][0]['sender']['id']);
+                        $this->sendProductList($sender);
                         break;
                 }
 
