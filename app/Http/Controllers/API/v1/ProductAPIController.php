@@ -15,6 +15,7 @@ class ProductAPIController extends Controller
     public function index()
     {
         return view("products.product_detail");
+        // return view("products.checkout_test");
     }
 
 

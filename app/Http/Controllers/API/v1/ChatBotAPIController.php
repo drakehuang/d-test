@@ -18,7 +18,7 @@ class ChatBotAPIController extends Controller
    /**
     * Facebook Webhook 驗證
     */
-        public function getFacebookWebhook (Request $request)
+    public function getFacebookWebhook (Request $request)
     {
         if (isset($_GET['hub_verify_token'])) {
             if ($_GET['hub_verify_token'] === 'drakeTest') {
