@@ -16,6 +16,7 @@ class OrderAPIController extends Controller
 
     public function getCheckout(Request $request)
     {
+        return view("order.payment_success");
         $input = $request->all();
         echo '<pre>';
         print_r($input);
@@ -41,7 +42,7 @@ class OrderAPIController extends Controller
         ));
 
         if ($charge) {
-            return redirect("https://www.messenger.com/closeWindow/?image_url=http://www.miankoutu.com/uploadfiles/2015-11-20/20151120225328226.png&display_text=%E4%BB%98%E6%AC%BE%E6%88%90%E5%8A%9F");
+            return view("order.payment_success");
         }
     }
 
