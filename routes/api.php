@@ -21,6 +21,7 @@ Route::group(['prefix' => 'v1'], function() {
 
     // restful API
     Route::resource('product', '\App\Http\Controllers\API\v1\ProductAPIController');
+    Route::resource('cart', '\App\Http\Controllers\API\v1\CartAPIController');
 
 });
 

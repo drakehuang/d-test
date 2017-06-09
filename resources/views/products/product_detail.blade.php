@@ -174,32 +174,6 @@
 
         /*# sourceMappingURL=style.css.map */
 
-        /**
-         * The CSS shown here will not be introduced in the Quickstart guide, but shows
-         * how you can use CSS to style your Element's container.
-         */
-        .StripeElement {
-          background-color: white;
-          padding: 8px 12px;
-          border-radius: 4px;
-          border: 1px solid transparent;
-          box-shadow: 0 1px 3px 0 #e6ebf1;
-          -webkit-transition: box-shadow 150ms ease;
-          transition: box-shadow 150ms ease;
-        }
-
-        .StripeElement--focus {
-          box-shadow: 0 1px 3px 0 #cfd7df;
-        }
-
-        .StripeElement--invalid {
-          border-color: #fa755a;
-        }
-
-        .StripeElement--webkit-autofill {
-          background-color: #fefde5 !important;
-        }
-
     </style>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -224,25 +198,24 @@
             <div class="container-fliud">
                 <div class="wrapper row">
                     <div class="preview col-md-6">
-
                         <div class="preview-pic tab-content">
-                          <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252" /></div>
-                          <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/400/252" /></div>
-                          <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-                          <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-                          <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+                            @foreach ($data['images'] as $key => $image)
+                                @if ($image->sort == 0)
+                                    <div class="tab-pane active" id="pic-{{$key}}"><li><img src="{{$image->path}}" width="200" height="400"></li></div>
+                                @else
+                                    <div class="tab-pane " id="pic-{{$key}}"><li><img src="{{$image->path}}" width="200" height="400"></li></div>
+                                @endif
+                            @endforeach
                         </div>
                         <ul class="preview-thumbnail nav nav-tabs">
-                          <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                          <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                          <li><a data-target="#pic-3" data-toggle="tab"><img src="http://servicetest01.pipimy.com.tw/product/41/image/2O559507c325c05.jpeg" /></a></li>
-                          <li><a data-target="#pic-4" data-toggle="tab"><img src="http://servicetest01.pipimy.com.tw/product/70/image/JV559cf98fab194.jpeg" /></a></li>
-                          <li><a data-target="#pic-5" data-toggle="tab"><img src="http://servicetest01.pipimy.com.tw/product/72/image/Ln559cfbbfd4e89.jpeg" /></a></li>
+                            @foreach ($data['images'] as $key => $image)
+                                <li><img src="{{$image->path}}" /></li>
+                            @endforeach
                         </ul>
 
                     </div>
                     <div class="details col-md-6">
-                        <h3 class="product-title">men's shoes fashion</h3>
+                        <h3 class="product-title">{{$data['title']}}</h3>
                         <div class="rating">
                             <div class="stars">
                                 <span class="fa fa-star checked"></span>
@@ -253,8 +226,8 @@
                             </div>
                             <span class="review-no">41 reviews</span>
                         </div>
-                        <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
-                        <h4 class="price">current price: <span>$180</span></h4>
+                        <p class="product-description">{{$data['description']}}</p>
+                        <h4 class="price">current price: <span>${{$data['price']}}</span></h4>
                         <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
                         <h5 class="sizes">sizes:
                             <span class="size" data-toggle="tooltip" title="small">s</span>

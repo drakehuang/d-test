@@ -62,11 +62,18 @@ class ChatBotAPIController extends Controller
                     case 'GET_STARTED_PAYLOAD':
                         $this->sendGreetingText($sender);
                         break;
+
                     // 處理詢問商品
                     case 'ASK_PRODUCT':
                         $this->typeOn($sender);
                         sleep(2);
                         $this->replyMessage($sender, '您好，請問需要詢問商品哪些事項');
+                        break;
+
+                    // 商品列表
+                    case 'PRODUCT_LIST':
+                        sleep(2);
+                        $this->sendProductList($sender);
                         break;
                 }
 
@@ -256,7 +263,7 @@ class ChatBotAPIController extends Controller
                                 "buttons" => [
                                     [
                                         "type"                 => "web_url",
-                                        "url"                  => "https://www.aibeemo.com/api/v1/product",
+                                        "url"                  => "https://www.aibeemo.com/api/v1/product/1",
                                         "title"                => "查看商品",
                                         "webview_height_ratio" => "tall"
                                     ],
