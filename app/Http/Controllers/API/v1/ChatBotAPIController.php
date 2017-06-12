@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Course;
+use DB;
+use App\Models;
 
 
 class ChatBotAPIController extends Controller
@@ -239,7 +241,15 @@ class ChatBotAPIController extends Controller
      */
     private function sendProductList($sender = null)
     {
+
+        $member = new Models\Member();
         if(!is_null($sender)) {
+            $userObj = DB::table("members")->where("psid", $sender)->first();
+
+            if (!$userObj) {
+                $userObj = $member->create(['psid' => $sender]);
+
+            }
             // 設定call FB API的參數
             $replyArray['recipient'] = ['id'   => $sender];
             $replyArray['message']   = [
@@ -263,7 +273,7 @@ class ChatBotAPIController extends Controller
                                 "buttons" => [
                                     [
                                         "type"                 => "web_url",
-                                        "url"                  => "https://www.aibeemo.com/api/v1/product/1",
+                                        "url"                  => "https://www.aibeemo.com/api/v1/product/1?user_id=" . $userObj->id,
                                         "title"                => "查看商品",
                                         "webview_height_ratio" => "tall"
                                     ],

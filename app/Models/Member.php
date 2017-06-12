@@ -8,6 +8,8 @@ class Member extends Model
 {
     protected $table = 'members';
 
+    public $timestamps = true;
+
     public $fillable = [
         "psid",
     ];

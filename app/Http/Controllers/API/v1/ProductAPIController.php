@@ -17,11 +17,10 @@ class ProductAPIController extends Controller
 
     public function index()
     {
-        #return view("products.product_detail");
-        return view("order.payment_success");
+
     }
 
-    public function show($product_id)
+    public function show($product_id, Request $request)
     {
         $product      = DB::table("products");
         $productStock = DB::table('product_stocks');
@@ -40,9 +39,7 @@ class ProductAPIController extends Controller
         $return['data']['description'] = $productObj->description;
         $return['data']['images'] = $productImageObj->toArray();
         $return['data']['stocks'] = $productStockObj->toArray();
-// echo '<pre>';
-// print_r($return);
-// exit;
+
         return view("products.product_detail", $return);
     }
 
